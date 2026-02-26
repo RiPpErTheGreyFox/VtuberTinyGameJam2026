@@ -15,33 +15,55 @@ hUGETracker - Music
 Schedule:
 3.5 days total
 Day 1: Concept/basic design (Thursday)
-Day 1: MVP: Getting basic mechanics implemented and ROM up and running in the HTML5 emulator (Thursday)
+Days 1-2: MVP: Getting basic mechanics implemented and ROM up and running in the HTML5 emulator (Thursday)
 Day 3: Art pass for both this game and the Amiga game that's being made concurrently (Saturday)
 Day 4: Final Polish (Sunday)
 Day 4: Submission Day (Sunday)
 
 Basic Concept:
-
+A game where you tend to a hydroponics lab on a space station, watering/fertilising plants as needed, 
+	plants changing visually to indicate their needs, and any plant that reaches maturity will increase your score,
+		final score will be determined by how many plants have made it to maturity
 
 Elevator Pitch:
-
+Take care of the hydroponics lab of your employers space station, utilising the available tools, plant, tend, care for and harvest
+	food to ensure your quota is met!
 
 Art Style:
 Cutesy/Chibi pixel art
 
 Overview of features required:
 A title screen
-Controls help screen
-Player Character
+Controls/how to play help screen
+Player Character that moves around and can pick up/drop things
+Tools that the player can pick up, drop and use on plants
+Planters that can contain growing crops that periodically require water or fertiliser
 
 Gameplay loop example:
+Player spawns in a room full of planting boxes, player walks over to seed box, picks up a seed, places it in the planter.
+As the plant grows it needs both water and fertiliser, it changes visual appearance to show which it needs, upon fully growing it plays
+	a sound and the player can now use a harvesting tool on them, once harvested a +1 will float up out of them and the score will increase
+A two(or more?) minute timer will have players attempting to achieve a high score
 
 Immediate To-do:
-Set up github
+*Set up github
+Finish up design documentation
 
 Needed for MVP:
 Write Checklist
+Tool pickup/dropoff
+Planters that automatically grow plants when empty
+Plants with 7 grow states
+Do water requirement only and auto-harvest when grown
 
 Notes:
 
 Features that are polish:
+Fertiliser tool
+Harvesting tool
+Planting seeds
+Multiple levels
+Colour support
+Extra sound effects
+Small story
+Saving highscore to cartridge?
