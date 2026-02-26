@@ -1,0 +1,47 @@
+VTuber Tiny Game Jam 2026
+
+Platform:
+Gameboy/Color Gameboy
+
+Optional Theme: 
+Grow
+
+Engine/Software used:
+Custom GBZ80 engine, using RGBDS assembler
+Aseprite - Art
+NEXXT - Art
+hUGETracker - Music
+
+Schedule:
+3.5 days total
+Day 1: Concept/basic design (Thursday)
+Day 1: MVP: Getting basic mechanics implemented and ROM up and running in the HTML5 emulator (Thursday)
+Day 3: Art pass for both this game and the Amiga game that's being made concurrently (Saturday)
+Day 4: Final Polish (Sunday)
+Day 4: Submission Day (Sunday)
+
+Basic Concept:
+
+
+Elevator Pitch:
+
+
+Art Style:
+Cutesy/Chibi pixel art
+
+Overview of features required:
+A title screen
+Controls help screen
+Player Character
+
+Gameplay loop example:
+
+Immediate To-do:
+Set up github
+
+Needed for MVP:
+Write Checklist
+
+Notes:
+
+Features that are polish:
