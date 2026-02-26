@@ -24,25 +24,12 @@ wNumberStringData: db
 	:db
 	:db
 
-SECTION "BoxVictoryConditionRAMBlock", WRAM0
-wBoxTypeMemory: db						; need four bytes for temp storage in the victory condition area
-	:db
-	:db
-	:db
-
 SECTION "Gameplay Data", WRAM0
-wBoxInPlay: db							; treat as a bool
-wBoxBeingHeld: db						; bool
-wBoxTileIndex: db						; starting tile index for the box graphics
-wBoxesRemainingInLevel: db				; the amount of boxes we need to spawn
-wBoxesRemainingFlammable: db			; the amount of flammable boxes left to spawn
-wBoxesRemainingRadioactive: db			; the amount of radioactive boxes left to spawn
-wVictoryFlagSet: db
 	dstruct PLAYER, mainCharacter		; declare our structs
 	dstruct BOX, currentActiveBox
 	dstruct CURSOR, boxCursor
 
-wLevelSelected: db						
+wLevelSelected: db
 wCurrentScene: db						; 0=MainMenu, 1=Cutscene, 2=HowToPlay, 3=Game
 
 SECTION "Animation Data", WRAM0
@@ -88,7 +75,7 @@ EntryPoint:
 	call EnableSound
 	ld a, 1
 	ld [wLevelSelected], a 
-	ld a, 0 
+	ld a, 3 
 	ld [wCurrentScene], a
 
 ReloadGame:
@@ -220,16 +207,6 @@ LevelOneTilesEnd:
 LevelOneTilemap:  INCBIN "gfx/backgrounds/LevelBackground1.tilemap"
 LevelOneTilemapEnd:
 
-LevelTwoTiles: INCBIN "gfx/backgrounds/LevelBackground2.2bpp"
-LevelTwoTilesEnd:
-LevelTwoTilemap:  INCBIN "gfx/backgrounds/LevelBackground2.tilemap"
-LevelTwoTilemapEnd:
-
-LevelThreeTiles: INCBIN "gfx/backgrounds/LevelBackground3.2bpp"
-LevelThreeTilesEnd:
-LevelThreeTilemap:  INCBIN "gfx/backgrounds/LevelBackground3.tilemap"
-LevelThreeTilemapEnd:
-
 SECTION "Graphics Data", ROMX
 
 PlayerSpriteData: INCBIN "gfx/player.2bpp"
@@ -237,12 +214,6 @@ PlayerSpriteDataEnd:
 
 CursorSpriteData: INCBIN "gfx/cursor.2bpp"
 CursorSpriteDataEnd:
-
-BoxesSpriteData: INCBIN "gfx/boxes.2bpp"
-BoxesSpriteDataEnd:
-
-ConveyorsSpriteData: INCBIN "gfx/Conveyors.2bpp"
-ConveyorsSpriteDataEnd:
 
 AlphabetTiles: INCBIN "gfx/backgrounds/text-font.2bpp"
 AlphabetTilesEnd:

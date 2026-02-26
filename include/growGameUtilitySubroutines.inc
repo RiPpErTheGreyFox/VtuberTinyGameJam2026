@@ -789,10 +789,6 @@ ConvertVRAMTileMapToROMTileMap:
 	jp z, .Cutscene
 	cp a, 1
 	jp z, .TileMapOne
-	cp a, 2
-	jp z, .TileMapTwo
-	cp a, 3
-	jp z, .TileMapThree
 	; TODO: if we have more than one level, add more conditionals
 .Cutscene
 	ld bc, CutsceneTilemap
@@ -802,13 +798,6 @@ ConvertVRAMTileMapToROMTileMap:
 	ld bc, LevelOneTilemap
 	add hl, bc
 	jp .EndOfFunc
-.TileMapTwo
-	ld bc, LevelTwoTilemap
-	add hl, bc
-	jp .EndOfFunc
-.TileMapThree
-	ld bc, LevelThreeTilemap
-	add hl, bc
 .EndOfFunc
 	ret
 
