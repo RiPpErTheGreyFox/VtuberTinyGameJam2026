@@ -1,6 +1,7 @@
 INCLUDE "include/hardware.inc"			; include all the defines
 INCLUDE "include/growGameStructs.inc"	; out of file definitions
 INCLUDE "include/growGameConstants.inc"
+INCLUDE "include/growGamePlantSubroutines.inc"
 INCLUDE "include/growGameUtilitySubroutines.inc"
 INCLUDE "include/growGameGameplaySubroutines.inc"
 INCLUDE "include/growGameMainMenuScene.inc"
@@ -26,7 +27,6 @@ wNumberStringData: db
 
 SECTION "Gameplay Data", WRAM0
 	dstruct PLAYER, mainCharacter		; declare our structs
-	dstruct BOX, currentActiveBox
 	dstruct CURSOR, boxCursor
 
 wLevelSelected: db
@@ -217,6 +217,9 @@ CursorSpriteDataEnd:
 
 AlphabetTiles: INCBIN "gfx/backgrounds/text-font.2bpp"
 AlphabetTilesEnd:
+
+PlantTiles: INCBIN "gfx/plants.2bpp"
+PlantTilesEnd:
 
 CutsceneTiles: INCBIN "gfx/backgrounds/Cutscene1.2bpp"
 CutsceneTilesEnd:

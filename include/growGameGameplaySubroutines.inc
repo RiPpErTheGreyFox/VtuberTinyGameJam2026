@@ -8,6 +8,9 @@ wLevelScoreAreaTopY: db
 wLevelScoreAreaRightX: db
 wLevelScoreAreaBottomY: db
 
+wSecondsRemainingInLevel: db
+wTicksUntilNextSecond: db
+
 SECTION "Animation Variables", WRAM0
 wPlayerAnimationCounter: db				; counts frames before next frame of animation
 wPlayerAnimationCurrentFrame: db		; keeps track of the current frame
@@ -115,6 +118,49 @@ InitialisePlayer:
 	ld a, %00000000
 	ld [hli], a
 
+	ret
+
+InitialiseCountdownTimer:
+	ld a, DEFAULT_SECONDS_PER_LEVEL
+	ld [wSecondsRemainingInLevel], a
+
+	ld a, TICKS_PER_SECOND
+	ld [wTicksUntilNextSecond], a
+
+	ret
+
+; updates and draws the timer at the top of the screen, call only once per vsync to keep time
+; @clobbers: a, b, de, hl
+; @returns: c - 1 for timer run out, 0 if time still remaining
+UpdateCountdownTimer:
+	ld a, [wTicksUntilNextSecond]
+	dec a
+	ld [wTicksUntilNextSecond], a
+	cp a, 0
+	jp z, .DecrementSecond				; if the tick timer is down to zero, then jump to decrement second
+	jp .DrawTimer						; otherwise just draw it and we'll be on our way
+.DecrementSecond:
+	ld a, [wSecondsRemainingInLevel]
+	dec a
+	ld [wSecondsRemainingInLevel], a
+	; do a check for zero seconds at this point
+	ld c, 0								; set the return to 0
+	cp a, 0
+	jp z, .TimerRanOut
+	jp .ResetTicks
+.TimerRanOut:
+	ld c, 1
+.ResetTicks:
+	ld a, TICKS_PER_SECOND
+	ld [wTicksUntilNextSecond], a
+.DrawTimer:
+	ld a, [wSecondsRemainingInLevel]
+	ld hl, wNumberStringData
+	call NumberToString
+
+	ld hl, wNumberStringData
+	ld de, $9800 + $12
+	call DrawTextTilesLoop
 	ret
 
 ; When passed in an XY, determine if tile is passable or not
@@ -613,6 +659,8 @@ InitialiseLevel:
 	call InitialisePlayer
 	call InitialiseCursor
 	call InitialiseFont
+	call InitialiseCountdownTimer
+	call InitialiseTestPlant
 
 	call SetBlankDMGPalette
 
@@ -826,10 +874,12 @@ UpdateGameScene:
 call DrawCursorObject
 call DrawPlayer
 
+call UpdateCountdownTimer
 call UpdateButtonDebounce
 call UpdateKeys
 call UpdatePlayer
 call UpdateCursor
+call UpdateTestPlant
 
 .EndOfFunc
 	ret

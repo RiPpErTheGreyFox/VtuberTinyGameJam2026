@@ -47,16 +47,38 @@ A two(or more?) minute timer will have players attempting to achieve a high scor
 
 Immediate To-do:
 *Set up github
-Finish up design documentation
+*Finish up design documentation
+*Create the structures for the plants
+*Create the structures for item pickups
+*Countdown timer
+Score being tracked and increased
+Have an item that can be picked up and dropped
+*Have a plant that draws into the room and grows to full
+
+Plants: Background Tile
+Items, Character: Sprites
+
+List of art needed:
+Watering Can
+-Planter
+-Plant stage 1
+-Plant stage 2
+-Plant stage 3
+-Plant stage 4
+-Plant withered
+New Character
+New Level
 
 Needed for MVP:
 Write Checklist
 Tool pickup/dropoff
 Planters that automatically grow plants when empty
-Plants with 7 grow states
+Plants with 4 grow states and wither state
 Do water requirement only and auto-harvest when grown
 
 Notes:
+*Plant Struct: tile number, stage, timer to next stage, status, hard lookup table for graphics, store a reference to the tile above (or use a sprite?)
+*Item Struct: 
 
 Features that are polish:
 Fertiliser tool
