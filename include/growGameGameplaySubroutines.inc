@@ -3,10 +3,7 @@ SECTION "Gameplay Specific Variables", WRAM0
 wLevelBoxCount: db
 wLevelFlammableBoxCount: db
 wLevelRadioactiveBoxCount: db
-wLevelScoreAreaLeftX: db
-wLevelScoreAreaTopY: db
-wLevelScoreAreaRightX: db
-wLevelScoreAreaBottomY: db
+wLevelScore: db
 
 wSecondsRemainingInLevel: db
 wTicksUntilNextSecond: db
@@ -29,10 +26,10 @@ SECTION "Gameplay Subroutines", ROM0
 
 InitialisePlayer:
 	; initialise player variables and load/define the tiles needed
-	ld a, 32
+	ld a, 8
 	ld [mainCharacter_XPos], a
 	ld [mainCharacter_XDestination], a
-	ld a, 32
+	ld a, 16
 	ld [mainCharacter_YPos], a
 	ld [mainCharacter_YDestination], a
 	ld a, 0
@@ -129,6 +126,12 @@ InitialiseCountdownTimer:
 
 	ret
 
+InitialiseScore:
+	ld a, 0
+	ld [wLevelScore], a
+
+	ret
+
 ; updates and draws the timer at the top of the screen, call only once per vsync to keep time
 ; @clobbers: a, b, de, hl
 ; @returns: c - 1 for timer run out, 0 if time still remaining
@@ -159,7 +162,17 @@ UpdateCountdownTimer:
 	call NumberToString
 
 	ld hl, wNumberStringData
-	ld de, $9800 + $12
+	ld de, $9800 + $11
+	call DrawTextTilesLoop
+	ret
+
+UpdateScoreDrawing:
+	ld a, [wLevelScore]
+	ld hl, wNumberStringData
+	call NumberToString
+
+	ld hl, wNumberStringData
+	ld de, $9800 + $04
 	call DrawTextTilesLoop
 	ret
 
@@ -660,11 +673,47 @@ InitialiseLevel:
 	call InitialiseCursor
 	call InitialiseFont
 	call InitialiseCountdownTimer
+	call InitialiseScore
 	call InitialisePlantGraphics
 	
-	ld b, 80
-	ld c, 72
-	ld hl, testPlant
+	ld b, 32
+	ld c, 48
+	ld hl, testPlant0
+	call InitialisePlant
+
+	ld b, 32+32
+	ld c, 48
+	ld hl, testPlant1
+	call InitialisePlant
+
+	ld b, 32+64
+	ld c, 48
+	ld hl, testPlant2
+	call InitialisePlant
+
+	ld b, 32+96
+	ld c, 48
+	ld hl, testPlant3
+	call InitialisePlant
+
+	ld b, 32
+	ld c, 80
+	ld hl, testPlant4
+	call InitialisePlant
+
+	ld b, 32+32
+	ld c, 80
+	ld hl, testPlant5
+	call InitialisePlant
+
+	ld b, 32+64
+	ld c, 80
+	ld hl, testPlant6
+	call InitialisePlant
+
+	ld b, 32+96
+	ld c, 80
+	ld hl, testPlant7
 	call InitialisePlant
 
 	call SetBlankDMGPalette
@@ -880,11 +929,27 @@ call DrawCursorObject
 call DrawPlayer
 
 call UpdateCountdownTimer
+call UpdateScoreDrawing
 call UpdateButtonDebounce
 call UpdateKeys
 call UpdatePlayer
 call UpdateCursor
-ld hl, testPlant
+
+ld hl, testPlant0
+call UpdatePlant
+ld hl, testPlant1
+call UpdatePlant
+ld hl, testPlant2
+call UpdatePlant
+ld hl, testPlant3
+call UpdatePlant
+ld hl, testPlant4
+call UpdatePlant
+ld hl, testPlant5
+call UpdatePlant
+ld hl, testPlant6
+call UpdatePlant
+ld hl, testPlant7
 call UpdatePlant
 
 .EndOfFunc

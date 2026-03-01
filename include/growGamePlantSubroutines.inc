@@ -1,5 +1,5 @@
 SECTION "Plant Data", WRAM0
-	dstruct PLANT, testPlant ; declare our structs
+	dstructs 8, PLANT, testPlant ; declare our structs
 
     wPlantTilesStart: db
 
@@ -71,7 +71,7 @@ PopulateTempVariablesFromHL:
     ld a, [hli]
     ld [wTempTimerToNextStage], a
     ld a, [hli]
-    ld [wTicksUntilNextSecond], a
+    ld [wTempTicksUntilNextSecond], a
     ret
 
 ; stores the struct data in temp variables into hl
@@ -141,8 +141,21 @@ GrowthStageUpdate:
 .ResetGrowth
     ld a, 0
     ld [wTempGrowthStage], a
+    call PlantHarvested
     call RedrawPlant
     ret
+
+; handles everything needed when the plant is harvested
+PlantHarvested:
+    ; Increase the score
+    ld a, [wLevelScore]
+    inc a
+    ld [wLevelScore], a
+
+    ; play a sound
+
+    ret 
+
 ; determines which tiles to write to and replaces them with the tile correct for the state the plant is in
 ; assumes temp variables are already loading
 RedrawPlant:
