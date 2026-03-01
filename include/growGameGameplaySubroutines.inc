@@ -660,7 +660,12 @@ InitialiseLevel:
 	call InitialiseCursor
 	call InitialiseFont
 	call InitialiseCountdownTimer
-	call InitialiseTestPlant
+	call InitialisePlantGraphics
+	
+	ld b, 80
+	ld c, 72
+	ld hl, testPlant
+	call InitialisePlant
 
 	call SetBlankDMGPalette
 
@@ -879,7 +884,8 @@ call UpdateButtonDebounce
 call UpdateKeys
 call UpdatePlayer
 call UpdateCursor
-call UpdateTestPlant
+ld hl, testPlant
+call UpdatePlant
 
 .EndOfFunc
 	ret

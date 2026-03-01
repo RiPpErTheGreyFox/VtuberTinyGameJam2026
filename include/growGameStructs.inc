@@ -27,8 +27,6 @@ INCLUDE "include/structs.inc"
     struct PLANT
         bytes 1, YPos ; 1 byte
         bytes 1, XPos ; 1 byte
-        bytes 1, Tile ; 1 byte tile index for drawing/type checking, will be referenced in the update sub
-        bytes 1, PlantTilesStart ; 1 byte which OAM object this will be using to draw to
         bytes 1, GrowthStage ; Contains the current growth stage of the plant (0-4)
         bytes 1, WaterAmount ; The amount of water currently in the plant, (0-255, takes some per tick)
         bytes 1, TimerToNextStage ; 1 byte which contains the amount of seconds until the next check
