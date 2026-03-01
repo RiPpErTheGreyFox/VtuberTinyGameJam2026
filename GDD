@@ -51,9 +51,42 @@ Immediate To-do:
 *Create the structures for the plants
 *Create the structures for item pickups
 *Countdown timer
-Score being tracked and increased
+*Score being tracked and increased
 Have an item that can be picked up and dropped
 *Have a plant that draws into the room and grows to full
+*Have multiple plants being updated
+
+*Write a function that will determine which plant is at an x/y position (return $FF if nothing)
+*Use the original function to move the cursor when in certain directions
+*Press A to watering can something under the cursor
+*Set the water level to $FF
+Have water level being reduced by a random amount every second
+Have a sound when plants mature
+Have a sound when plants go dry
+-MVP Mechanically complete
+
+New Title Screen
+Skip How To Play
+Skip Cutscene
+New Character
+Update tiles on level
+Make a page and submission
+-MVP content complete
+
+Have item on ground to be picked up when touched
+Press B to throw item away
+Watering Can Item graphic
+Harvest Item graphic
+A uses item that's in hand
+How to play
+-Stage 2 complete
+
+Cutscene with main menu graphic
+-Stage 3 complete
+
+Fertiliser Item
+No fertiliser graphic
+-Stage 4 complete
 
 Plants: Background Tile
 Items, Character: Sprites

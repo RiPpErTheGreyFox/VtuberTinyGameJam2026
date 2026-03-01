@@ -1,5 +1,5 @@
 SECTION "Plant Data", WRAM0
-	dstructs 8, PLANT, testPlant ; declare our structs
+	dstructs NUMBER_OF_PLANTS, PLANT, testPlant ; declare our structs
 
     wPlantTilesStart: db
 
@@ -31,7 +31,7 @@ InitialisePlant:
 	ld [wTempXPos], a
 	ld a, 0
 	ld [wTempGrowthStage], a ; Contains the current growth stage of the plant (0-3)
-    ld a, 255
+    ld a, 10
     ld [wTempWaterAmount], a ; The amount of water currently in the plant, (0-255, takes some per tick)
     ld a, 2
     ld [wTempTimerToNextStage], a ; 1 byte which contains the amount of seconds until the next check
@@ -217,4 +217,70 @@ RedrawPlant:
     ld [hl], a                          ; write it to the tilemap
 
     
+    ret
+
+; Finds the address of which plant is at the X/Y value 
+; @params: b,c X/Y coordinate
+; @return: hl address of the plant at the point
+FindPlantAddressAtXY:
+    ld hl, testPlant0
+    ld d, NUMBER_OF_PLANTS            ; set loop counter
+.loop:
+
+    ld a, [hli]
+    cp a, c                             ; check if YPos matches
+    jp nz, .YEscape                     ; if not, not our guy
+    ld a, [hli]
+    cp a, b                             ; check if XPos matches
+    jp nz, .nextItem                    ; if not, next item
+    jp .foundPlant                      ; otherwise both match and this is what we're looking for
+.YEscape
+    inc hl
+
+.nextItem
+    ld a, sizeof_PLANT-2                ; increment memory counter
+    ld a, l
+    add a, sizeof_PLANT-2
+    ld l, a
+    dec d
+    jp nz, .loop                        ; if there's still loops left, keep going
+
+.notFound
+    ld hl, $0000                        ; set the return to 0 to indicate we didn't find anything
+    ret 
+
+.foundPlant:
+    dec hl                              ; reset the pointer to the start of the struct
+    dec hl
+    ret
+
+; grabs the plant the player is looking at and sets it's water to 255/$FF
+WaterPlant:
+    ; get player XPos and YPos
+	; calculate an offset from the top left to the intended position (adjust this with direction later)
+	ld a, [mainCharacter_XPos]		; grab the X position of the player
+	sub 8							; offset from the top left
+	ld b, a							; stick it in B ready for any function calls
+	ld a, [mainCharacter_YPos]		; do the same for Y
+	add 8
+	ld c, a
+
+	call AdjustBoxOffsetForDirection
+
+	; call get tile by pixel to get the tile offset
+	call FindPlantAddressAtXY
+
+    ; check if the high address on the return is $00
+    ld a, h
+    cp a, $00
+    jp z, .return                       ; if high address is $00 then we didn't find anything
+
+    ld a, l                             ; grab the low address
+    add a, 3                            ; we want the third byte of the plant struct
+    ld l, a
+
+    ld a, $FF                           ; set water to 255
+    ld [hl], a
+    
+.return
     ret

@@ -755,6 +755,8 @@ UpdateCursor:
 	add 8
 	ld c, a
 
+	call AdjustBoxOffsetForDirection
+
 	push bc							; save the X/Y position
 	call WaitNoMode3
 	; call get tile by pixel to get the tile offset
@@ -764,8 +766,10 @@ UpdateCursor:
 	; check if there's a box in hand, or if there's a box in front of us
 	call WaitNoMode3
 	ld a, [hl]						; get the tile type at that address
-	cp a, 128						; compare to 127, if > 127, carry bit will not be set
-	jp nc, .EnableCursor				; if carry bit set, jump to pick up box
+	cp a, 179						; compare to 179 and 180, if
+	jp z, .EnableCursor				; if zero bit is set we've got the pot
+	cp a, 180
+	jp z, .EnableCursor
 	
 .DisableCursor
 	ld a, 0
@@ -788,7 +792,7 @@ UpdateCursor:
 	ld a, [boxCursor_Enabled]
 	cp a, 0
 	jp z, .DoNotDraw
-	;call EnableCursor
+	call EnableCursor
 	jp .FinishedDrawing
 .DoNotDraw
 	call DisableCursor
@@ -818,6 +822,54 @@ DisableCursor:
 	ld [boxCursor_XPos], a
 
 	ret
+	
+; Function for checking and adjusting the direction based offsets for box related positions
+; @param bc: x/y
+; @clobbers a
+; @return bc: x/y
+AdjustBoxOffsetForDirection:
+	; do direction based offsetting 0 = N, 1 = E, 2 = S, 3 = W
+	ld a, [mainCharacter_Direction]
+	cp a, 0
+	jp z, .NorthCursor
+	cp a, 1
+	jp z, .EastCursor
+	cp a, 2
+	jp z, .SouthCursor
+	cp a, 3
+	jp z, .WestCursor
+
+.NorthCursor						; offset the cursor to appear in the correct spot
+	ld a, b							; remember that it starts at -8/+8
+	add 8
+	ld b, a
+	ld a, c
+	sub 16
+	ld c, a
+	jp .EndOfFunc
+.EastCursor
+	ld a, b				
+	add 24
+	ld b, a
+	ld a, c
+	add 0
+	ld c, a
+	jp .EndOfFunc
+.SouthCursor	
+	ld a, b				
+	add 8
+	ld b, a
+	ld a, c
+	add 8
+	ld c, a
+	jp .EndOfFunc
+.WestCursor
+	; defaults are for west cursor
+	jp .EndOfFunc
+
+.EndOfFunc
+	ret
+
 
 ; draw function where we actually update the OAM's to make sure it's at the start of the frame
 DrawPlayer:
@@ -951,6 +1003,22 @@ ld hl, testPlant6
 call UpdatePlant
 ld hl, testPlant7
 call UpdatePlant
+
+.ItemUsageChecking:
+	ld a, [wCurKeys]
+	and a, PADF_A
+	jp nz, .WaterPlantCheck
+
+	jp .EndOfFunc
+
+.WaterPlantCheck:
+	; check if the debounce is done
+	call CheckButtonDebounce			; check the button debounce flag
+	cp a, 1								; if a == 1, zero flag will be set
+	jp z, .EndOfFunc					; skip the button
+	call SetButtonDebounce				; otherwise debounce is clear and we can press button
+	call WaterPlant						; make sure to reset the debounce
+	jp .EndOfFunc
 
 .EndOfFunc
 	ret
